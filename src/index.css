@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    /* Coral/Salmon Red from logo */
+    --primary: 8 75% 62%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 8 75% 95%;
+    --primary-dark: 8 75% 52%;
+
+    /* Sage/Olive Green from logo */
+    --secondary: 85 40% 52%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 90 35% 92%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 8 75% 62%;
+
+    --radius: 1rem;
+
+    /* Custom design tokens matching logo */
+    --warm-beige: 90 20% 92%;
+    --warm-cream: 90 30% 96%;
+    --terracotta-soft: 8 75% 92%;
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-warm: 0 4px 20px rgba(219, 69, 26, 0.12);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 8 75% 62%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 8 30% 20%;
+    --primary-dark: 8 75% 52%;
+
+    --secondary: 85 40% 52%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 90 20% 18%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 8 75% 62%;
+    
+    --warm-beige: 90 10% 18%;
+    --warm-cream: 90 10% 15%;
+    --terracotta-soft: 8 30% 18%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes flyToCart {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(0.8) translate(calc(var(--target-x) * 0.3), calc(var(--target-y) * 0.3));
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(0.4) translate(calc(var(--target-x) * 0.7), calc(var(--target-y) * 0.7));
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.1) translate(var(--target-x), var(--target-y));
+    opacity: 0;
+  }
+}
