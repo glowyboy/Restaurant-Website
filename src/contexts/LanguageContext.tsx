@@ -20,6 +20,15 @@ const translations = {
     heroSubtitle: 'Savourez l\'authenticité du Maroc',
     heroDescription: 'Découvrez nos délicieux plats marocains préparés avec amour',
     orderNow: 'Commander Maintenant',
+    serviceNumber1: 'Le service #1 de repas',
+    inCanada: 'au Canada !',
+    mealsLikeHome: 'DES REPAS',
+    asIfYouWereThere: 'COMME SI VOUS Y ÉTIEZ.',
+    readyIn3Min: 'Prêts en 3 minutes sans effort',
+    deliveryInAlgeria: 'Livraison en Algérie',
+    dishesAvailable: '+20 plats disponibles chaque semaine !',
+    seeMenu: 'Voir le menu',
+    howItWorksQuestion: 'Comment ça marche ?',
     
     // Menu
     forHowManyPeople: 'Nbr. de personnes',
@@ -75,6 +84,15 @@ const translations = {
     heroSubtitle: 'تذوق أصالة المغرب',
     heroDescription: 'اكتشف أطباقنا المغربية اللذيذة المحضرة بحب',
     orderNow: 'اطلب الآن',
+    serviceNumber1: 'الخدمة رقم 1 للوجبات',
+    inCanada: 'في كندا !',
+    mealsLikeHome: 'وجبات',
+    asIfYouWereThere: 'كأنك هناك.',
+    readyIn3Min: 'جاهزة في 3 دقائق بدون جهد',
+    deliveryInAlgeria: 'التوصيل في الجزائر',
+    dishesAvailable: '+20 طبق متاح كل أسبوع !',
+    seeMenu: 'عرض القائمة',
+    howItWorksQuestion: 'كيف يعمل ؟',
     
     // Menu
     forHowManyPeople: 'عدد الأشخاص',
