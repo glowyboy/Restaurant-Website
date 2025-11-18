@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import AddressAutocomplete from "./AddressAutocomplete";
 
 interface CheckoutFormProps {
   onSubmit: (data: CheckoutData) => void;
@@ -17,8 +16,6 @@ export interface CheckoutData {
   fullName: string;
   phone: string;
   address: string;
-  city: string;
-  postalCode: string;
 }
 
 const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) => {
@@ -26,8 +23,6 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
     fullName: "",
     phone: "",
     address: "",
-    city: "",
-    postalCode: "",
   });
 
   const [errors, setErrors] = useState<Partial<CheckoutData>>({});
@@ -37,9 +32,7 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
     
     if (!formData.fullName.trim()) newErrors.fullName = "Nom complet requis";
     if (!formData.phone.trim()) newErrors.phone = "Numéro de téléphone requis";
-    if (!formData.address.trim()) newErrors.address = "Adresse requise";
-    if (!formData.city.trim()) newErrors.city = "Ville requise";
-    if (!formData.postalCode.trim()) newErrors.postalCode = "Code postal requis";
+    if (!formData.address.trim()) newErrors.address = "Adresse complète requise";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,7 +51,7 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
         <Label htmlFor="fullName">Nom complet *</Label>
         <Input
           id="fullName"
-          value={formData.fullName}
+          value={formData.fullName || ''}
           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
           placeholder="Jean Dupont"
           className={errors.fullName ? "border-destructive" : ""}
@@ -79,49 +72,18 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="address">Adresse complète *</Label>
-        <AddressAutocomplete
-          value={formData.address}
-          onChange={(address, city, postalCode) => {
-            setFormData({
-              ...formData,
-              address,
-              city: city || formData.city,
-              postalCode: postalCode || formData.postalCode,
-            });
-          }}
-          error={errors.address}
+        <Label htmlFor="address">Adresse complète de livraison *</Label>
+        <Input
+          id="address"
+          value={formData.address || ''}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+          placeholder="123 Rue Example, Montréal, QC H2X 1Y7"
+          className={errors.address ? "border-destructive" : ""}
         />
         {errors.address && <p className="text-xs text-destructive">{errors.address}</p>}
         <p className="text-xs text-muted-foreground">
-          💡 Tapez votre adresse et sélectionnez dans la liste
+          Incluez le numéro, rue, ville et code postal
         </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="city">Ville *</Label>
-          <Input
-            id="city"
-            value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-            placeholder="Montréal"
-            className={errors.city ? "border-destructive" : ""}
-          />
-          {errors.city && <p className="text-xs text-destructive">{errors.city}</p>}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="postalCode">Code postal *</Label>
-          <Input
-            id="postalCode"
-            value={formData.postalCode}
-            onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-            placeholder="H2X 1Y7"
-            className={errors.postalCode ? "border-destructive" : ""}
-          />
-          {errors.postalCode && <p className="text-xs text-destructive">{errors.postalCode}</p>}
-        </div>
       </div>
 
       <div className="flex gap-4 pt-4">

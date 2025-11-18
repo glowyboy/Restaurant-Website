@@ -53,7 +53,7 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
                 meals_per_day: mealsPerDay || null,
                 customer_name: customerData.fullName,
                 customer_phone: customerData.phone,
-                delivery_address: `${customerData.address}, ${customerData.city}, ${customerData.postalCode}`,
+                delivery_address: customerData.address,
                 items: items.map(item => ({
                     dish_id: item.id,
                     dish_name: item.name,
