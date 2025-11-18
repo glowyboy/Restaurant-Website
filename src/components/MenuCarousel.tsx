@@ -30,26 +30,30 @@ const MenuCarousel = () => {
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    if (!scrollContainer || dishes.length === 0) return;
 
     let scrollAmount = 0;
-    const scrollStep = 2;
-    const scrollInterval = 20;
+    const scrollSpeed = 0.5; // pixels per frame
+    let animationFrameId: number;
 
     const scroll = () => {
       if (scrollContainer) {
-        scrollAmount += scrollStep;
+        scrollAmount += scrollSpeed;
+        
+        // Reset when we've scrolled through half (one set of duplicated dishes)
         if (scrollAmount >= scrollContainer.scrollWidth / 2) {
           scrollAmount = 0;
         }
+        
         scrollContainer.scrollLeft = scrollAmount;
+        animationFrameId = requestAnimationFrame(scroll);
       }
     };
 
-    const intervalId = setInterval(scroll, scrollInterval);
+    animationFrameId = requestAnimationFrame(scroll);
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [dishes]);
 
   // Double the dishes array for seamless loop
   const duplicatedDishes = [...dishes, ...dishes];
