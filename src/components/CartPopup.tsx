@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Minus, Plus, Trash2, CreditCard } from "lucide-react";
+import { Minus, Plus, Trash2, CreditCard, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -10,6 +10,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useOrder } from "@/contexts/OrderContext";
+import CheckoutForm, { type CheckoutData } from "./CheckoutForm";
 
 interface CartItem {
     id: number;
@@ -31,9 +32,16 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
     const { toast } = useToast();
     const { selectedPlan, numberOfPeople, mealsPerDay } = useOrder();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+    const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null);
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const handleStripeCheckout = async () => {
+    const handleCheckoutFormSubmit = (data: CheckoutData) => {
+        setCheckoutData(data);
+        handleStripeCheckout(data);
+    };
+
+    const handleStripeCheckout = async (customerData: CheckoutData) => {
         setIsSubmitting(true);
 
         try {
@@ -43,6 +51,9 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
                 plan_name: selectedPlan?.name || null,
                 number_of_people: numberOfPeople || null,
                 meals_per_day: mealsPerDay || null,
+                customer_name: customerData.fullName,
+                customer_phone: customerData.phone,
+                delivery_address: `${customerData.address}, ${customerData.city}, ${customerData.postalCode}`,
                 items: items.map(item => ({
                     dish_id: item.id,
                     dish_name: item.name,
@@ -90,6 +101,8 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
                 });
 
                 onOpenChange(false);
+                setShowCheckoutForm(false);
+                setCheckoutData(null);
                 setIsSubmitting(false);
             }, 2000);
 
@@ -105,10 +118,28 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={(isOpen) => {
+            onOpenChange(isOpen);
+            if (!isOpen) {
+                setShowCheckoutForm(false);
+                setCheckoutData(null);
+            }
+        }}>
             <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-black">VOTRE PANIER</DialogTitle>
+                    <DialogTitle className="text-2xl font-black flex items-center gap-2">
+                        {showCheckoutForm && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setShowCheckoutForm(false)}
+                                className="h-8 w-8"
+                            >
+                                <ArrowLeft className="h-5 w-5" />
+                            </Button>
+                        )}
+                        {showCheckoutForm ? "INFORMATIONS DE LIVRAISON" : "VOTRE PANIER"}
+                    </DialogTitle>
                 </DialogHeader>
 
                 {items.length === 0 ? (
@@ -195,35 +226,39 @@ const CartPopup = ({ open, onOpenChange, items, onUpdateQuantity, onRemoveItem }
                             </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex gap-4">
-                            <Button
-                                variant="outline"
-                                onClick={() => onOpenChange(false)}
-                                className="flex-1 rounded-full border-2 border-primary py-6 font-bold text-primary hover:bg-primary-light"
-                                disabled={isSubmitting}
-                            >
-                                Continuer vos achats
-                            </Button>
-                            <Button
-                                onClick={handleStripeCheckout}
-                                className="flex-1 rounded-full bg-primary py-6 font-bold hover:bg-primary-dark"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? (
-                                    "Traitement..."
-                                ) : (
-                                    <>
+                        {/* Checkout Form or Actions */}
+                        {showCheckoutForm ? (
+                            <CheckoutForm
+                                onSubmit={handleCheckoutFormSubmit}
+                                isSubmitting={isSubmitting}
+                                onCancel={() => setShowCheckoutForm(false)}
+                            />
+                        ) : (
+                            <>
+                                <div className="flex gap-4">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => onOpenChange(false)}
+                                        className="flex-1 rounded-full border-2 border-primary py-6 font-bold text-primary hover:bg-primary-light"
+                                        disabled={isSubmitting}
+                                    >
+                                        Continuer vos achats
+                                    </Button>
+                                    <Button
+                                        onClick={() => setShowCheckoutForm(true)}
+                                        className="flex-1 rounded-full bg-primary py-6 font-bold hover:bg-primary-dark"
+                                        disabled={isSubmitting}
+                                    >
                                         <CreditCard className="mr-2 h-5 w-5" />
-                                        Payer avec Stripe
-                                    </>
-                                )}
-                            </Button>
-                        </div>
-                        
-                        <p className="text-center text-xs text-muted-foreground">
-                            🔒 Paiement sécurisé avec Stripe (Mode Test)
-                        </p>
+                                        Procéder au paiement
+                                    </Button>
+                                </div>
+                                
+                                <p className="text-center text-xs text-muted-foreground">
+                                    🔒 Paiement sécurisé avec Stripe (Mode Test)
+                                </p>
+                            </>
+                        )}
                     </div>
                 )}
             </DialogContent>
