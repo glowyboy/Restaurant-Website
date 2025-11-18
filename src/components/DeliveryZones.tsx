@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/hooks/useSettings";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const DeliveryZones = () => {
   const { zones, loading } = useSettings();
+  const { t } = useLanguage();
 
   if (loading) {
     return (
       <section className="container py-16 md:py-24">
         <div className="text-center">
-          <p className="text-muted-foreground">Chargement des zones...</p>
+          <p className="text-muted-foreground">{t('loadingZones')}</p>
         </div>
       </section>
     );
@@ -23,12 +25,12 @@ const DeliveryZones = () => {
   return (
     <section className="container py-16 md:py-24">
       <div className="text-center">
-        <p className="mb-4 text-lg font-semibold text-primary">Villes</p>
+        <p className="mb-4 text-lg font-semibold text-primary">{t('cities')}</p>
         <h2 className="mb-12 text-3xl font-black md:text-4xl">
-          ZONES DE LIVRAISON
+          {t('deliveryZones')}
         </h2>
         <p className="mx-auto mb-12 max-w-2xl text-lg text-muted-foreground">
-          Nous livrons des repas frais et savoureux dans les villes suivantes :
+          {t('deliveryZonesDescription')}
         </p>
       </div>
 

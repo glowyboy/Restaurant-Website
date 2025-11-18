@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase, type Dish } from "@/lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const MenuCarousel = () => {
+  const { t } = useLanguage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
 
@@ -56,13 +58,13 @@ const MenuCarousel = () => {
     <section className="w-full bg-warm-cream py-16 md:py-24">
       <div className="container text-center">
         <h2 className="mb-4 text-3xl font-black md:text-4xl">
-          LE MENU DE LA SEMAINE
+          {t('weeklyMenu')}
         </h2>
         <p className="mb-4 text-lg font-semibold">
-          Des plats savoureux, du petit-déjeuner aux desserts.
+          {t('deliciousDishes')}
         </p>
         <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
-          Notre menu change chaque semaine pour vous offrir de la fraîcheur et de la variété.
+          {t('menuChangesWeekly')}
         </p>
       </div>
 
@@ -87,14 +89,14 @@ const MenuCarousel = () => {
 
       <div className="text-center">
         <p className="mb-6 text-lg font-semibold">
-          Commandez vos repas favoris dès maintenant !
+          {t('orderFavorites')}
         </p>
         <Button
           size="lg"
           className="rounded-full bg-primary px-8 py-6 text-base font-bold hover:bg-primary-dark"
           onClick={() => window.location.href = '/menu'}
         >
-          Voir le menu complet
+          {t('seeFullMenu')}
         </Button>
       </div>
     </section>

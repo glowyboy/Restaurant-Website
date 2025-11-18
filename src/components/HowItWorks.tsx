@@ -1,37 +1,40 @@
 import { Utensils, Truck, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const steps = [
-  {
-    number: "1",
-    icon: Utensils,
-    title: "CHOISISSEZ VOS REPAS",
-    description: "Un menu varié qui change chaque semaine.",
-  },
-  {
-    number: "2",
-    icon: Truck,
-    title: "LIVRÉ CHEZ VOUS !",
-    description: "Des plats frais, jamais congelés, livrés directement à votre porte.",
-  },
-  {
-    number: "3",
-    icon: Flame,
-    title: "RÉCHAUFFEZ ET SAVOUREZ",
-    description: "Au micro-ondes, au four ou à la poêle, prêts en 3 minutes.",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HowItWorks = () => {
+  const { t } = useLanguage();
+  
+  const steps = [
+    {
+      number: "1",
+      icon: Utensils,
+      title: t('step1Title'),
+      description: t('step1Description'),
+    },
+    {
+      number: "2",
+      icon: Truck,
+      title: t('step2Title'),
+      description: t('step2Description'),
+    },
+    {
+      number: "3",
+      icon: Flame,
+      title: t('step3Title'),
+      description: t('step3Description'),
+    },
+  ];
+
   return (
     <section className="container py-16 md:py-24">
       <div className="text-center">
-        <p className="mb-4 text-lg font-semibold text-primary">Comment Ça marche ?</p>
+        <p className="mb-4 text-lg font-semibold text-primary">{t('howItWorksQuestion')}</p>
         <h2 className="mb-4 text-3xl font-black md:text-4xl">
-          COMMENT LA BOX MAROCAINE VOUS SIMPLIFIE LA VIE
+          {t('howItWorksTitle')}
         </h2>
         <p className="mx-auto mb-16 max-w-3xl text-lg text-muted-foreground">
-          Chaque semaine, recevez des repas marocains faits maison en trois étapes simples :
+          {t('howItWorksSubtitle')}
         </p>
       </div>
 

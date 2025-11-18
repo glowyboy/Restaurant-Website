@@ -210,7 +210,7 @@ const Menu = () => {
                     onClick={() => setStep(2)}
                     className="rounded-full border-2 border-primary text-primary hover:bg-primary-light w-full md:w-auto shrink-0"
                   >
-                    Retour
+                    {t('back')}
                   </Button>
                 </div>
 

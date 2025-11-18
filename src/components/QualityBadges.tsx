@@ -1,18 +1,21 @@
 import { CheckCircle, Crown, Beef, Leaf } from "lucide-react";
-
-const badges = [
-  { icon: CheckCircle, text: "RECETTES AUTHENTIQUES" },
-  { icon: Crown, text: "QUALITÉ PREMIUM" },
-  { icon: Beef, text: "VIANDE DE QUALITÉ" },
-  { icon: Leaf, text: "100% NATUREL" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const QualityBadges = () => {
+  const { t, language } = useLanguage();
+  
+  const badges = [
+    { icon: CheckCircle, text: t('authenticRecipes') },
+    { icon: Crown, text: t('premiumQuality') },
+    { icon: Beef, text: t('qualityMeat') },
+    { icon: Leaf, text: t('naturalIngredients') },
+  ];
+
   return (
-    <section className="w-full bg-muted py-8">
+    <section className="w-full bg-muted py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container">
         <div className="flex items-center justify-between gap-4">
-          <h3 className="text-lg font-bold md:text-xl">ON S'ENGAGE À VOUS OFFRIR :</h3>
+          <h3 className="text-lg font-bold md:text-xl">{t('qualityCommitment')}</h3>
           <div className="flex flex-wrap items-center justify-end gap-8">
             {badges.map((badge, index) => (
               <div key={index} className="flex items-center gap-2">
