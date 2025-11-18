@@ -10,11 +10,13 @@ import orderImage from "@/assets/order-image.jpg";
 import { supabase, type Plan } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useOrder } from "@/contexts/OrderContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Menu = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setSelectedPlan, setNumberOfPeople, setMealsPerDay } = useOrder();
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [selectedPeople, setSelectedPeople] = useState<number | null>(null);
   const [selectedMealsPerDay, setSelectedMealsPerDay] = useState<number | null>(null);
@@ -56,52 +58,52 @@ const Menu = () => {
   }, [toast]);
 
   return (
-    <div className="min-h-screen pt-24">
+    <div className="min-h-screen pt-20 md:pt-24">
       <Header />
       <PromoBanner />
       
       <main className="container py-12">
-        {/* Progress Steps */}
-        <div className="mb-12 flex items-center justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className={`flex h-16 w-16 items-center justify-center rounded-full ${step >= 1 ? 'bg-primary' : 'bg-muted'}`}>
-              <Users className={`h-8 w-8 ${step >= 1 ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
+        {/* Progress Steps - Responsive */}
+        <div className="mb-8 md:mb-12 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4 px-4 py-4">
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center">
+            <div className={`flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full shrink-0 ${step >= 1 ? 'bg-primary' : 'bg-muted'}`}>
+              <Users className={`h-7 w-7 md:h-8 md:w-8 ${step >= 1 ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
             </div>
-            <span className="text-sm font-semibold">1. Nbr. de personnes</span>
+            <span className="text-sm md:text-sm font-semibold whitespace-nowrap">1. {t('forHowManyPeople')}</span>
           </div>
           
-          <div className={`h-1 w-24 ${step >= 2 ? 'bg-primary' : 'bg-muted'}`}></div>
+          <div className={`h-10 w-1 md:h-1 md:w-20 shrink-0 ${step >= 2 ? 'bg-primary' : 'bg-muted'}`}></div>
           
-          <div className="flex items-center gap-2">
-            <div className={`flex h-16 w-16 items-center justify-center rounded-full ${step >= 2 ? 'bg-primary' : 'bg-muted'}`}>
-              <span className={`text-2xl ${step >= 2 ? 'text-primary-foreground' : 'text-muted-foreground'}`}>🍽️</span>
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center">
+            <div className={`flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full shrink-0 ${step >= 2 ? 'bg-primary' : 'bg-muted'}`}>
+              <span className={`text-2xl md:text-2xl ${step >= 2 ? 'text-primary-foreground' : 'text-muted-foreground'}`}>🍽️</span>
             </div>
-            <span className="text-sm font-semibold">2. Nbr. de plats</span>
+            <span className="text-sm md:text-sm font-semibold whitespace-nowrap">2. {t('howManyMealsPerDay')}</span>
           </div>
           
-          <div className={`h-1 w-24 ${step >= 3 ? 'bg-primary' : 'bg-muted'}`}></div>
+          <div className={`h-10 w-1 md:h-1 md:w-20 shrink-0 ${step >= 3 ? 'bg-primary' : 'bg-muted'}`}></div>
           
-          <div className="flex items-center gap-2">
-            <div className={`flex h-16 w-16 items-center justify-center rounded-full ${step >= 3 ? 'bg-primary' : 'bg-muted'}`}>
-              <span className={`text-2xl ${step >= 3 ? 'text-primary-foreground' : 'text-muted-foreground'}`}>📋</span>
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center">
+            <div className={`flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full shrink-0 ${step >= 3 ? 'bg-primary' : 'bg-muted'}`}>
+              <span className={`text-2xl md:text-2xl ${step >= 3 ? 'text-primary-foreground' : 'text-muted-foreground'}`}>📋</span>
             </div>
-            <span className="text-sm font-semibold">3. Choisir le plan</span>
+            <span className="text-sm md:text-sm font-semibold whitespace-nowrap">3. {t('chooseYourPlan')}</span>
           </div>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-2">
-          {/* Left: Image */}
-          <div className="rounded-3xl overflow-hidden">
+        <div className="grid gap-6 md:gap-12 lg:grid-cols-2 px-4">
+          {/* Left: Image - Hidden on mobile, shown on tablet+ */}
+          <div className="hidden lg:block rounded-3xl overflow-hidden">
             <img src={orderImage} alt="Repas marocain" className="h-full w-full object-cover" />
           </div>
 
           {/* Right: Steps */}
           <div>
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 <div>
-                  <h2 className="mb-2 text-3xl font-black">POUR COMBIEN DE PERSONNES ?</h2>
-                  <p className="text-muted-foreground">Nous utilisons cette information pour vous proposer le plan idéal.</p>
+                  <h2 className="mb-2 text-2xl md:text-3xl font-black">{t('forHowManyPeople')}</h2>
+                  <p className="text-sm md:text-base text-muted-foreground">{t('weUseThisInfo')}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -118,7 +120,7 @@ const Menu = () => {
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-terracotta-soft">
                         <Users className="h-6 w-6 text-primary" />
                       </div>
-                      <span className="text-lg font-bold">Juste moi</span>
+                      <span className="text-lg font-bold">{t('justMe')}</span>
                     </div>
                   </button>
 
@@ -135,7 +137,7 @@ const Menu = () => {
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-terracotta-soft">
                         <Users className="h-6 w-6 text-primary" />
                       </div>
-                      <span className="text-lg font-bold">Un repas à partager (pour deux)</span>
+                      <span className="text-lg font-bold">{t('mealToShare')}</span>
                     </div>
                   </button>
                 </div>
@@ -143,18 +145,18 @@ const Menu = () => {
             )}
 
             {step === 2 && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
+              <div className="space-y-4 md:space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <h2 className="mb-2 text-3xl font-black">COMBIEN DE REPAS PAR JOUR ?</h2>
-                    <p className="text-muted-foreground">Nous utilisons cette information pour vous proposer le plan idéal.</p>
+                    <h2 className="mb-2 text-2xl md:text-3xl font-black">{t('howManyMealsPerDay')}</h2>
+                    <p className="text-sm md:text-base text-muted-foreground">{t('weUseThisInfo')}</p>
                   </div>
                   <Button
                     variant="outline"
                     onClick={() => setStep(1)}
-                    className="rounded-full border-2 border-primary text-primary hover:bg-primary-light"
+                    className="rounded-full border-2 border-primary text-primary hover:bg-primary-light w-full md:w-auto shrink-0"
                   >
-                    Retour
+                    {t('back')}
                   </Button>
                 </div>
 
@@ -172,7 +174,7 @@ const Menu = () => {
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
                         <span className="text-xl text-primary">🍽️</span>
                       </div>
-                      <span className="text-lg font-bold">1 seul repas</span>
+                      <span className="text-lg font-bold">{t('oneMeal')}</span>
                     </div>
                   </button>
 
@@ -189,7 +191,7 @@ const Menu = () => {
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
                         <span className="text-xl text-primary">🍽️🍽️</span>
                       </div>
-                      <span className="text-lg font-bold">Dîner et Souper</span>
+                      <span className="text-lg font-bold">{t('dinnerAndSupper')}</span>
                     </div>
                   </button>
                 </div>
@@ -197,32 +199,32 @@ const Menu = () => {
             )}
 
             {step === 3 && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
+              <div className="space-y-4 md:space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <h2 className="mb-2 text-3xl font-black">CHOISIR VOTRE PLAN</h2>
-                    <p className="text-muted-foreground">Choisissez votre plan idéal et profitez de repas marocains faits maison.</p>
+                    <h2 className="mb-2 text-2xl md:text-3xl font-black">{t('chooseYourPlan')}</h2>
+                    <p className="text-sm md:text-base text-muted-foreground">{t('chooseIdealPlan')}</p>
                   </div>
                   <Button
                     variant="outline"
                     onClick={() => setStep(2)}
-                    className="rounded-full border-2 border-primary text-primary hover:bg-primary-light"
+                    className="rounded-full border-2 border-primary text-primary hover:bg-primary-light w-full md:w-auto shrink-0"
                   >
                     Retour
                   </Button>
                 </div>
 
                 {loading ? (
-                  <div className="py-12 text-center">
-                    <p className="text-lg text-muted-foreground">Chargement des plans...</p>
+                  <div className="py-8 md:py-12 text-center">
+                    <p className="text-base md:text-lg text-muted-foreground">{t('loading')}...</p>
                   </div>
                 ) : (
-                  <div className="grid gap-4 md:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {plans.map((plan) => (
                       <Card key={plan.id} className="relative overflow-hidden border-2 transition-all hover:border-primary hover:shadow-lg">
                         {plan.is_popular && (
                           <div className="absolute left-0 right-0 top-0 bg-primary py-1 text-center text-sm font-bold text-primary-foreground">
-                            Populaire
+                            {t('popular')}
                           </div>
                         )}
                         <CardContent className={`space-y-4 p-6 ${plan.is_popular ? 'pt-10' : ''}`}>
@@ -230,15 +232,15 @@ const Menu = () => {
                             {plan.name}
                           </h3>
                           <p className="text-center">
-                            À partir de{" "}
+                            {t('fromPrice')}{" "}
                             <span className="text-2xl font-bold text-primary">${plan.price}</span>
-                            /plat
+                            {t('perMeal')}
                           </p>
                           <Button 
                             onClick={() => handlePlanSelect(plan)}
                             className="w-full rounded-full bg-primary py-6 font-bold hover:bg-primary-dark"
                           >
-                            Choisir le repas
+                            {t('selectPlan')}
                           </Button>
                         </CardContent>
                       </Card>

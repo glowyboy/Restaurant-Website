@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CartPopup from "@/components/CartPopup";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
@@ -49,23 +50,27 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 z-50 w-full border-b bg-background shadow-md">
-        <div className="container flex h-24 items-center justify-between">
-          <a href="/" className="flex items-center -my-16 cursor-pointer">
-            <img src={logo} alt="Lamsalna" className="h-56 w-auto" />
+        <div className="container flex h-20 md:h-24 items-center justify-between px-2 md:px-4">
+          <a href="/" className="flex items-center -my-12 md:-my-16 cursor-pointer -ml-2 md:ml-0">
+            <img src={logo} alt="Lamsalna" className="h-40 md:h-56 w-auto" />
           </a>
           
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="relative rounded-full border-2 border-primary hover:bg-primary-light"
-            onClick={() => setCartOpen(true)}
-            data-cart-icon
-          >
-            <ShoppingCart className="h-5 w-5 text-primary" />
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
-            </span>
-          </Button>
+          <div className="flex items-center gap-3 md:gap-4">
+            <LanguageSwitcher />
+            
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="relative rounded-full border-2 border-primary hover:bg-primary-light"
+              onClick={() => setCartOpen(true)}
+              data-cart-icon
+            >
+              <ShoppingCart className="h-5 w-5 text-primary" />
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+            </Button>
+          </div>
         </div>
       </header>
 
