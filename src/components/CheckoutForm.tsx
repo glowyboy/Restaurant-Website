@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 interface CheckoutFormProps {
   onSubmit: (data: CheckoutData) => void;
@@ -79,14 +80,22 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
 
       <div className="space-y-2">
         <Label htmlFor="address">Adresse complète *</Label>
-        <Input
-          id="address"
+        <AddressAutocomplete
           value={formData.address}
-          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          placeholder="123 Rue Example"
-          className={errors.address ? "border-destructive" : ""}
+          onChange={(address, city, postalCode) => {
+            setFormData({
+              ...formData,
+              address,
+              city: city || formData.city,
+              postalCode: postalCode || formData.postalCode,
+            });
+          }}
+          error={errors.address}
         />
         {errors.address && <p className="text-xs text-destructive">{errors.address}</p>}
+        <p className="text-xs text-muted-foreground">
+          💡 Tapez votre adresse et sélectionnez dans la liste
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
