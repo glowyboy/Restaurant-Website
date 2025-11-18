@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 interface CheckoutFormProps {
   onSubmit: (data: CheckoutData) => void;
@@ -30,69 +30,6 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
   });
 
   const [errors, setErrors] = useState<Partial<CheckoutData>>({});
-  const addressInputRef = useRef<HTMLInputElement>(null);
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-
-  // Initialize Google Places Autocomplete
-  useEffect(() => {
-    if (!addressInputRef.current) return;
-
-    // Check if Google Maps API is loaded
-    if (typeof google === "undefined" || !google.maps || !google.maps.places) {
-      console.warn("Google Maps API not loaded");
-      return;
-    }
-
-    try {
-      autocompleteRef.current = new google.maps.places.Autocomplete(
-        addressInputRef.current,
-        {
-          types: ["address"],
-          componentRestrictions: { country: ["ca", "us"] }, // Canada and US
-        }
-      );
-
-      autocompleteRef.current.addListener("place_changed", () => {
-        const place = autocompleteRef.current?.getPlace();
-        if (!place || !place.address_components) return;
-
-        let street = "";
-        let city = "";
-        let postalCode = "";
-
-        place.address_components.forEach((component) => {
-          const types = component.types;
-          if (types.includes("street_number")) {
-            street = component.long_name + " ";
-          }
-          if (types.includes("route")) {
-            street += component.long_name;
-          }
-          if (types.includes("locality")) {
-            city = component.long_name;
-          }
-          if (types.includes("postal_code")) {
-            postalCode = component.long_name;
-          }
-        });
-
-        setFormData((prev) => ({
-          ...prev,
-          address: street || place.formatted_address || "",
-          city: city,
-          postalCode: postalCode,
-        }));
-      });
-    } catch (error) {
-      console.error("Error initializing Google Places:", error);
-    }
-
-    return () => {
-      if (autocompleteRef.current) {
-        google.maps.event.clearInstanceListeners(autocompleteRef.current);
-      }
-    };
-  }, []);
 
   const validateForm = () => {
     const newErrors: Partial<CheckoutData> = {};
@@ -131,30 +68,25 @@ const CheckoutForm = ({ onSubmit, isSubmitting, onCancel }: CheckoutFormProps) =
       <div className="space-y-2">
         <Label htmlFor="phone">Numéro de téléphone *</Label>
         <PhoneInput
-          defaultCountry="ca"
+          international
+          defaultCountry="CA"
           value={formData.phone}
-          onChange={(phone) => setFormData({ ...formData, phone })}
-          inputClassName={`w-full ${errors.phone ? "border-destructive" : ""}`}
-          className="phone-input-custom"
+          onChange={(phone) => setFormData({ ...formData, phone: phone || "" })}
+          className={`phone-input-wrapper ${errors.phone ? "border-destructive" : ""}`}
         />
         {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="address">Adresse *</Label>
+        <Label htmlFor="address">Adresse complète *</Label>
         <Input
           id="address"
-          ref={addressInputRef}
           value={formData.address}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          placeholder="Commencez à taper votre adresse..."
+          placeholder="123 Rue Example"
           className={errors.address ? "border-destructive" : ""}
-          autoComplete="off"
         />
         {errors.address && <p className="text-xs text-destructive">{errors.address}</p>}
-        <p className="text-xs text-muted-foreground">
-          💡 L'adresse se complète automatiquement
-        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
